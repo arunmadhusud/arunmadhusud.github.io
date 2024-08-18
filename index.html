@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 16px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+        }
+        .side-menu {
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            background-color: #000; /* Pure black color */
+            padding: 20px;
+            left: 10px;
+            color: white; /* Ensures text is visible */
+            overflow: hidden; /* Ensures overlay and content fit within the menu */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centers content horizontally */
+            justify-content: flex-start; /* Aligns content at the start vertically */
+        }
+
+        .profile-photo {
+            width: 120px; /* Adjust size as needed */
+            height: 120px; /* Adjust size as needed */
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px; /* Space between the photo and menu items */
+        }
+
+        .side-menu {
+            width: 250px;
+            position: fixed;
+            height: 100vh;
+            background: linear-gradient(135deg, #00040b, rgb(27, 33, 87)); /* Gradient background */
+            padding: 20px;
+            left: 10px;
+            color: white;
+        }
+
+
+        .profile-picture-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #34495e; /* Darker background on hover */
+        }
+
+        .menu-icon {
+            width: 24px; /* Adjust size as needed */
+            height: auto;
+            margin-right: 10px;
+            filter: invert(1);
+        }
+
+
+
+
+        .main-content {
+            margin-left: 150px;
+            margin-right: 0px; /* Add this line to set a right margin */
+            width: calc(100%); /* Adjust width to account for the right margin */
+            padding-bottom: 20px;
+        }
+
+        .experience-item {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        .experience-title {
+            flex-grow: 1;
+        }
+        .experience-title h3 {
+            margin: 0;
+            font-size: 22px;
+            color: #2c3e50;
+        }
+        .company-logo {
+            max-width: 120px;
+            height: auto;
+            margin-left: 20px;
+        }
+        .experience-content ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+        .experience-content ul li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .experience-content ul li:last-child {
+            border-bottom: none;
+        }
+        .experience-content {
+            text-align: justify;
+        }
+        header {
+            position: relative;
+            background-image: url('images/background_3.jpeg'); /* Replace with your image path */
+            background-size: cover; /* Ensures the image covers the entire header */
+            background-position: center; /* Centers the image */
+            background-repeat: no-repeat; /* Prevents the image from repeating */
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            overflow: hidden; /* Ensures overlay doesn't overflow */
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7); /* Black overlay with 50% opacity */
+            z-index: 1; /* Places the overlay above the background image */
+        }
+
+        header h1, header p, .social-icons {
+            position: relative; /* Ensures text is above the overlay */
+            z-index: 2;
+        }
+
+
+        h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+        .subtitle {
+            font-size: 14px;
+            color: #ecf0f1;
+        }
+        .social-icons {
+            display: flex;
+            justify-content: center; /* Center-aligns the icons horizontally */
+            gap: 20px; /* Space between icons */
+        }
+
+        .social-icon {
+            display: flex;
+            align-items: center;
+            color: white; /* Sets the text color to white */
+            text-decoration: none; /* Removes the default underline */
+            border-bottom: 2px solid white; /* Permanent underline color */
+            padding-bottom: 2px;
+        }
+
+        .social-icon img {
+            width: 24px; /* Adjust size as needed */
+            height: auto;
+            margin-right: 8px; /* Space between icon and text */
+            filter: brightness(0) invert(1); /* Changes the icon color to white */
+        }
+
+        .social-icon:hover {
+            color: #3498db; /* Hover color for text */
+            /* Remove border-bottom-color change on hover */
+        }
+
+        .social-icon:hover img {
+            filter: brightness(0) invert(0); /* Optional: change icon color on hover if needed */
+        }
+
+
+
+
+        .section {
+            margin-top: 40px;
+        }
+        .section-title {
+            font-size: 24px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .about-me {
+            display: flex;
+            align-items: flex-start;
+        }
+        #about {
+            border: 1px solid #ddd; /* Same border style as experience-item */
+            border-radius: 8px; /* Matching border radius */
+            background-color: #ffffff; /* Same background color as experience-item */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: To match the shadow effect */
+            padding: 20px; /* Same padding as experience-item */
+            margin-bottom: 20px; /* Optional: To match spacing */
+        }
+        .profile-picture {
+            width:300px; /* Adjust width as needed */
+            height: 300px; /* Adjust height as needed */
+            border-radius: 8px; /* Optional: For slightly rounded corners */
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .project {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .project:hover {
+            transform: translateY(-5px);
+        }
+        .project img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .justified-paragraph {
+            text-align: justify;
+        }
+        .indented-list {
+            padding-left: 2em;
+            list-style-position: outside;
+        }
+        .project-overview {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .project-overview p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        .project-overview p:last-child {
+            margin-bottom: 0;
+        }
+        .category-title {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+        .contact-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+            transition: transform 0.3s ease;
+        }
+        .contact-item:hover {
+            transform: translateY(-5px);
+        }
+        .contact-item img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        .contact-item span {
+            font-size: 14px;
+        }
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #2c3e50;
+            z-index: 1000;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .mobile-nav {
+            display: none;
+            padding: 10px;
+        }
+        .mobile-nav a {
+            display: block;
+            padding: 10px;
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid #34495e;
+        }
+        .mobile-nav a:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 1024px) {
+            body {
+                font-size: 14px;
+            }
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            .side-menu {
+                display: none;
+            }
+            .mobile-menu {
+                display: block;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 100%;
+                padding-top: 60px;
+            }
+            .projects {
+                grid-template-columns: 1fr;
+            }
+            .experience-item {
+                flex-direction: column;
+            }
+            .company-logo {
+                margin: 10px 0 0 0;
+                max-width: 100px;
+            }
+            .project-overview {
+                padding: 15px;
+            }
+            .project-overview p {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+            .project {
+                padding: 10px;
+            }
+            .project h3 {
+                font-size: 18px;
+            }
+            .project p {
+                font-size: 14px;
+            }
+            .project-links .button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+            .category-title {
+                font-size: 18px;
+                margin-top: 25px;
+                margin-bottom: 15px;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            .section-title {
+                font-size: 20px;
+            }
+            .about-me {
+                flex-direction: column;
+                align-items: center;
+            }
+            .profile-picture {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+            .button, .side-menu a {
+                padding: 12px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .project-overview {
+                padding: 12px;
+            }
+            .project-overview p {
+                font-size: 13px;
+            }
+            .project h3 {
+                font-size: 16px;
+            }
+            .project p {
+                font-size: 13px;
+            }
+            .project-links .button {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+            .category-title {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-menu">
+        <button class="menu-toggle">☰</button>
+        <nav class="mobile-nav">
+            <a href="#about">About Me</a>
+            <a href="#experience">Experience</a>
+            <a href="#projects">Projects</a>            
+            <a href="#contact">Contact</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <nav class="side-menu">
+            <img src="images/profile-picture.png" alt="Profile Photo" class="profile-photo">
+            <a href="#about" class="menu-item">
+                <img src="https://icons.getbootstrap.com/assets/icons/person.svg" alt="About Icon" class="menu-icon"> About Me
+            </a>
+            <a href="#experience" class="menu-item">
+                <img src="https://icons.getbootstrap.com/assets/icons/card-list.svg" alt="Experience Icon" class="menu-icon"> Experience
+            </a>
+            <a href="#projects" class="menu-item">
+                <img src="https://icons.getbootstrap.com/assets/icons/images.svg" alt="Projects Icon" class="menu-icon"> Projects
+            </a>
+            <a href="#contact" class="menu-item">
+                <img src="https://icons.getbootstrap.com/assets/icons/telephone.svg" alt="Contact Icon" class="menu-icon"> Contact
+            </a>
+        </nav>
+        
+       
+        <main class="main-content">
+            <header>
+                <h1>ARUN MADHUSDHANAN</h1>
+                <p class="subtitle">ROBOTICS & AI | COMPUTER VISION | Ex - EXXONMOBIL | Ex - FESTO</p>
+                <div class="social-icons">
+                    <a href="https://www.linkedin.com/in/arun-m1/" target="_blank" class="social-icon linkedin">
+                        <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/linkedin.svg" alt="LinkedIn">
+                        LinkedIn
+                    </a>
+                    <a href="https://github.com/arunmadhusud" target="_blank" class="social-icon github">
+                        <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/github.svg" alt="GitHub">
+                        GitHub
+                    </a>
+                    <a href="mailto:madhusudhanan.a@northeastern.edu" target="_blank" class="social-icon email">
+                        <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/gmail.svg" alt="Email">
+                        Email
+                    </a>
+                </div>
+                
+                
+            </header>
+
+            <div id="about" class="section">
+                <h2 class="section-title">ABOUT ME</h2>
+                <div class="about-me">
+                    <img src="images/profile-picture.png" alt="Arun Madhusdhanan" class="profile-picture">
+                    <div class="about-content">                        
+                        <p class="justified-paragraph">I am a Robotics graduate student at Northeastern University with a concentration in computer science. Graduating in December 2024, I am seeking full-time opportunities starting January 2025 in Machine Learning, Computer Vision, and Robotics software positions.</p>
+                        <p class="justified-paragraph">During my time at Northeastern, I have:</p>
+                        <ul>
+                            <li class="justified-paragraph">Developed expertise in Computer Vision, 3D Vision, Machine Learning and Model Optimization through various projects.</li>
+                            <li class="justified-paragraph">Served as a Teaching Assistant for a graduate-level Computer Vision course</li>
+                            <li class="justified-paragraph">Completed a 6-month internship at Festo Corporation as an ML Research Engineer, where I developed a machine learning model for predicting the output parameters of a high-precision liquid dosing unit (The device is currently in patent application).</li>
+                        </ul>
+                        <p class="justified-paragraph">Prior to my graduate studies, I worked for 4 years at ExxonMobil as a Wells Engineer responsible for design and selection of oil well equipments. As one of the first hires, I contributed to the growth of the Bengaluru technical center from its inception to a team of 60+ engineers. While my background in oil and gas differs from robotics, I am certain that the problem-solving, teamwork, and management skills I gained working in Fortune 500 company will be valuable in any industry.</p>            
+                        <p class="justified-paragraph">I am excited about the opportunity to bring my diverse experience and technical skills to innovative projects in robotics and AI. Please explore my experiences and projects below. I welcome discussions about how my background could contribute to your team's success.</p>
+                        <div class="project-links">
+                            <a href="pdfs/resume.pdf" class="button" target="_blank">VIEW MY RESUME</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="experience" class="section">
+                <h2 class="section-title">EXPERIENCE</h2>
+
+                <!-- Graduate Teaching Assistant, Computer Vision at Northeastern University -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Graduate Teaching Assistant, Computer Vision</h3>
+                            <p class="company-name">Northeastern University - Boston, MA</p>
+                            <p>January 2024 - April 2024</p>
+                        </div>
+                        <img src="images/northeastern-logo.png" alt="Northeastern University" class="company-logo">
+                    </div>
+                    <div class="about-content">
+                        <p>As a Graduate Teaching Assistant for the Computer Vision course at Northeastern University, I was responsible for code review, debugging, and grading projects in C++, Python, OpenCV, and PyTorch for a cohort of 120+ students. I also held weekly office hours to mentor students on various topics. Key topics covered included:</p>
+                        <ul>
+                            <li>Image Filtering</li>
+                            <li>Content-Based Image Retrieval</li>
+                            <li>2D Object Recognition</li>
+                            <li>Camera Calibration, KeyPoint Detectors, and Descriptors</li>
+                            <li>Stereo Vision</li>
+                            <li>Foundations of Machine Learning Methods in Computer Vision</li>
+                        </ul>
+                    </div>
+                </div>            
+
+
+            
+                <!-- Machine Learning Engineer Co-op at Festo USA -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Machine Learning Research Engineer Co-op</h3>
+                            <p class="company-name">Festo USA - Boston</p>
+                            <p>July 2023 - December 2023</p>
+                        </div>
+                        <img src="images/festo-logo.png" alt="Festo USA" class="company-logo">
+                    </div>
+                    <div class="experience-content">
+                        <p>At Festo USA, as part of a three-member team, my primary responsibility was to develop and implement a machine learning model to predict the output parameters of a high-precision liquid dosing unit, capable of handling volumes from microliters to milliliters. Given full autonomy in model selection and development, I successfully created an end-to-end solution that not only proved the concept but also contributed to a patented device. Here are the key areas of my work:</p>
+                        <ul>
+                            <li><strong>Software Optimization:</strong> Enhanced the software associated with the liquid dosing unit, significantly improving system efficiency and speed. The optimized software included modules for sensing unit activation, hardware drivers for data acquisition, and components for data conversion and storage. These improvements greatly facilitated seamless experiment execution during the data collection phase.</li>
+                            <li><strong>Machine Learning Algorithm Development:</strong> Designed and implemented a machine learning algorithm to predict the liquid dosing unit's output parameters. This involved conducting various experiments, analyzing system data, and identifying key characteristics. For model selection, I explored a range of machine learning approaches, including Long Short-Term Memory cells, Temporal Convolutional Networks, Neural Networks, and classical methods such as Decision Trees, Random Forests, AdaBoost, and Gradient Boosting. Throughout this process, I utilized various libraries including PyTorch, SciPy, Scikit-learn, NumPy, and Pandas.</li>
+                            <li><strong>Data Labeling and Performance Metrics:</strong> Post-processed collected data to extract relevant features, created a clean dataset for machine learning tasks, and developed appropriate performance metrics to compare different models. This crucial step significantly enhanced the accuracy and reliability of the machine learning models.</li>
+                            <li><strong>Live Inferencing Testing:</strong> Conducted live inferencing tests using the developed machine learning model on a host PC connected to the system. These tests achieved an impressive error rate of less than 2.5%, substantially exceeding the project requirement of 5% - a notable achievement considering the microliter-scale precision required.</li>
+                            <li><strong>Patent Application:</strong> The high-quality work contributed by our team, resulted in a novel technology that is now under patent application.</li>
+                        </ul>
+                    </div>
+                </div>
+            
+                <!-- Wells Engineer at ExxonMobil -->
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <div class="experience-title">
+                            <h3>Wells Engineer</h3>
+                            <p class="company-name">ExxonMobil - Bangalore</p>
+                            <p>July 2017 - June 2021</p>
+                        </div>
+                        <img src="images/ExxonMobil-Logo.png" alt="ExxonMobil" class="company-logo">
+                    </div>
+                    <div class="experience-content">
+                        <p>I was one of the first hires on the new Wells Team at the Bangalore Technology Centre of ExxonMobil. I played a key role in delivering high-quality work to the business unit, which significantly helped establish the team’s credibility. By the time I left to pursue higher studies, the team had grown to over 60 engineers, who were delivering exceptional work globally.</p>
+                        <ul>
+                            <li><strong>Design and Selection of Casing Pipes:</strong> My primary responsibility was to design and select casing pipes and other equipment for installation in oil wells. I supported business divisions across the world in delivering fit-for-purpose and cost-effective tubular designs for over 15 fields and 60 wells. One of my key accomplishments was leading the beta testing of in-house casing and tubing design software, as well as third-party software DrillPlan, as a technical team lead.</li>
+                            <li><strong>Improvement of Tubular Connection Workflow:</strong> Stewarded and improved the tubular connection workflow for business divisions globally in accordance with API 5C5, resulting in $100k immediate savings and long-term synergistic benefits. Through a study that I led, the organizational change in the tubular design process resulted in $130k immediate savings and considerable synergistic savings through process simplification, greater standardization, and inventory transferability.</li>
+                            <li><strong>Onboarding and Mentoring:</strong> Took the initiative to onboard and mentor Wells Engineers into technical projects while providing continuous guidance to them. These achievements demonstrate my technical expertise, leadership skills, and commitment to driving results that positively impact the organization.</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                        
+            
+
+                <div id="projects" class="section">
+                    <h2 class="section-title">PROJECTS</h2>
+                    
+                    <div class="project-overview">
+                        <p>
+                            My portfolio highlights a range of projects in Robotics, AI, and Computer Vision that I’m truly excited about. Each one reflects a problem I’ve enjoyed tackling, whether it’s coding complex algorithms from scratch, optimizing them for real-world applications, or exploring the power of sensor fusion.
+                        </p>
+                        <p>
+                            Please take a look at some of my projects below.
+                        </p>
+                    </div>
+
+                    <h3 class="category-title">3D Vision and Processing</h3>
+                    <div class="projects">
+                        <div class="project">
+                            <img src="images/ttc_results_2.gif" alt="Time to Collision">
+                            <h3>Time to Collision (TTC) Calculation Using Camera and LiDAR Data</h3>
+                            <p style="text-align: justify;">
+                                The goal of this project is to detect and track 3D objects using both camera and LiDAR data, and to calculate the Time to Collision (TTC) for each object in the ego lane using each sensor separately. Accurate TTC calculation is crucial for collision avoidance in autonomous driving, where precise timing can help prevent accidents. 
+                            <p style="text-align: justify;">
+                                The project involved the following steps:
+                                <ul>
+                                    <li>Detecting 2D objects in camera images using YOLO v3.</li>
+                                    <li>Processing LiDAR point cloud data to identify 3D objects within the ego lane.</li>
+                                    <li>Tracking the 2D bounding boxes detected by YOLO across frames using a keypoint matching method.</li>
+                                    <li>Associating 3D points projected onto the image plane with the tracked 2D bounding boxes to monitor 3D objects.</li>
+                                    <li>Calculating TTC separately using camera and LiDAR data for the tracked 3D objects and 2D bounding boxes.</li>
+                                </ul>
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/Time_2_collision" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/pcl.gif" alt="PCL Processing">
+                            <h3>3D Point Cloud Processing using PCL</h3>
+                            <p style="text-align: justify;">
+                                This project aimed to explore various techniques in the Point Cloud Library (PCL) for processing and analyzing 3D point cloud data, a crucial component in perception systems for autonomous vehicles and robotics. The focus was on four key operations essential for understanding and extracting meaningful information from 3D sensor data:
+                                <ul>
+                                    <li>Downsampling & Filtering: Implementing techniques like voxel grid filtering to reduce point cloud density while preserving important features.</li>
+                                    <li>Segmentation: Utilizing algorithms such as RANSAC to separate the ground plane from objects of interest.</li>
+                                    <li>Clustering: Employing methods like Euclidean cluster extraction to group points that likely belong to the same object.</li>
+                                    <li>Bounding Box Creation: Implementing techniques to encapsulate clustered objects for further analysis, which is vital for object detection and tracking in autonomous systems.</li>
+                                </ul>
+                                The project utilized point cloud files from a self-driving car dataset provided by Udacity as part of their Sensor Fusion Nanodegree program.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/point_cloud_processing" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/lego_spiral_4.gif" alt="NeRF">
+                            <h3>NeRF from Scratch</h3>
+                            <p style="text-align: justify;">
+                                This project is a PyTorch implementation of Tiny NeRF, a simplified version of the Neural Radiance Fields (NeRF) model. The model is trained on images of a Lego set to render a 360-degree view of the scene. Key simplifications include the use of 3D spatial coordinates instead of the original 5D input, and uniform sampling along the ray instead of hierarchical sampling. 
+                        
+                                The following steps were taken in this implementation:
+                                <ul>
+                                    <li>Compute the camera rays and sample 3D points along the rays</li>
+                                    <li>Positionally encode the sampled points and feed them into the network to compute the color and volume density (σ) for each point</li>
+                                    <li>Use the volume density (σ) to compute the compositing weights of samples on a ray</li>
+                                    <li>Compute the pixel color by integrating the colors of all samples along a ray</li>
+                                </ul>
+                                The final model successfully generates high-quality renders after 1000 iterations.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/Tiny_NeRF" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>                    
+                   
+
+                        <div class="project">
+                            <img src="images/sfm.gif" alt="Structure from Motion">
+                            <h3>Structure from Motion (SfM)</h3>
+                            <p style="text-align: justify;">
+                                Structure from Motion (SfM) is a powerful technique in computer vision that enables the reconstruction of 3D structures from sequences of 2D images. This project aimed to solidify my understanding of 3D reconstruction principles, including keypoint detection and matching, camera projection matrices, stereo vision, fundamental and essential matrices, and bundle adjustment.
+                                Using a dataset provided by COLMAP, I implemented a complete SfM pipeline with the following key steps:
+                                <ul>
+                                    <li>Feature detection and matching using the AKAZE.</li>
+                                    <li>Fundamental matrix estimation.</li>
+                                    <li>Camera pose estimation.</li>
+                                    <li>Triangulation to reconstruct 3D points from corresponding 2D image points.</li>
+                                </ul>
+                            </p>
+                            <p style="text-align: justify;">
+                                The reconstructed 3D structure was visualized using the Open3D library.Two main challenges were addressed in this project:
+                                <ul>
+                                    <li>Accurate relative scale estimation between frames: Solved by storing and comparing previously triangulated 3D points with those obtained from new views.</li>
+                                    <li>Outlier removal: Implemented using the RANSAC method during fundamental matrix calculation, enhancing the robustness of the reconstruction.</li>
+                                </ul>
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/structure_from_motion" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+
+                        <div class="project">
+                            <img src="images/GRNet_pointnet.gif" alt="3D Object Detection">
+                            <h3>3D Object Detection From Partial Point Clouds</h3>
+                            <p style="text-align: justify;">
+                                Point clouds are widely used as geometric data in various deep learning tasks like object detection and segmentation. However, in real-world scenarios, partial point clouds are often encountered due to limitations in sensors, occlusions, and other factors. The classification of objects from partial point clouds is a difficult task because of the sparsity, noise, and lack of complete representation of objects. This project aims to create a 3D object classification system that can classify objects from partial point clouds. To overcome the challenges, the GRNet neural network architecture is used to predict the missing data and complete the partial point clouds, which are then processed by PointNet, a deep learning framework that directly handles raw point clouds for object classification. The proposed method in this project performs equally or better than SOTA PointNet++.
+                            </p>
+                            <div class="project-links">
+                                <a href="pdfs/3D_Object_Classification.pdf" class="button" target="_blank">REPORT</a>
+                                <a href="https://github.com/arunmadhusud/3D-Object-Detection-From-Partial-Point-Clouds" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>  
+                        
+                        <!-- Add a placeholder for new project : Sesnor fusion of Lidar and Radar -->
+                        <div class="project">
+                            <img src="images/placeholder.gif" alt="placeholder">
+                            <h3>Sensor fusion of Lidar and Radar for object tracking</h3>
+                            <p style="text-align: justify;"> Coming soon (Working on this project now)...</p>
+                            <!-- <div class="project-links">
+                                <a href="#" class="button">REPORT</a>
+                                <a href="#" class="button">GITHUB</a>
+                            </div> -->
+                        </div> 
+
+                        
+                    </div>
+                    
+                    
+                    <h3 class="category-title">Computer Vision</h3>
+                    <div class="projects">
+                        <div class="project">
+                            <img src="images/opticalflow.gif" alt="Optical Flow Estimation">
+                            <h3>Optical Flow Estimation</h3>
+                            <p style="text-align: justify;">
+                                Optical flow estimation has found applications in various computer vision applications like object detection and tracking, movement detection, robot navigation, and visual odometry. This project presents a comprehensive study comparing the performance of both the classical and deep learning approaches for estimating dense optical flow. We used the Farneback method as a representative of classical techniques and FlowNet 2.0 as a representative of deep learning-based methods. Our experimental results highlight the performance comparison of both methods on a defined dataset using appropriate metrics - L1 error, Average end point error, and Average angular error. The results show that FlowNet 2.0 provides significantly better results than the Farneback Algorithm.
+                            </p>
+                            <div class="project-links">
+                                <a href="pdfs/Optical_Flow_Comparison.pdf" class="button" target="_blank">REPORT</a>
+                                <a href="https://github.com/arunmadhusud/Optical-Flow-Estimation" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/vqgan.gif" alt="GAN and VAE">
+                            <h3>GAN and VAE from Scratch</h3>
+                            <p style="text-align: justify;">
+                                Generative Adversarial Networks (GANs) and Variational Autoencoders (VAEs) are two powerful techniques in the field of generative models, enabling the creation of new, realistic data by learning from existing datasets. In this project, I implemented the architectures of both GAN and VAE from scratch using the CelebA dataset, successfully generating new images.
+                            </p>
+                            <p style="text-align: justify;">
+                                Additionally, I implemented a VQGAN + CLIP model to generate images based on text prompts, showcasing the versatility and creative potential of these models. GIF shows the images generated from the text prompt "A colorful painting of a jellyfish by a coral reef, trending on ArtStation," using the VQGAN-CLIP model.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/GAN_VAE" class="button" target="_blank">REPORT</a>
+                                <a href="https://github.com/arunmadhusud/VQGAN-CLIP" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>                      
+
+                        <div class="project">
+                            <img src="images/image_captioning.gif" alt="Image Captioning">
+                            <h3>Image Captioning using CNN + LSTMs and ViT + GPT2</h3>
+                            <p style="text-align: justify;">
+                                In this project, I explored the power of deep learning models for generating captions from images. I used two different architectures: a Convolutional Neural Network (CNN) encoder with a ResNet backbone paired with a Long Short-Term Memory (LSTM) decoder, and a transformer-based model that combines Vision Transformer (ViT) with Generative Pre-trained Transformer 2 (GPT-2). The CNN-LSTM model was trained from scratch using the Flickr8K dataset, while the ViT + GPT-2 model was fine-tuned on the same dataset. The architectures were assessed using metrics such as BLEU score, ROUGE score, METEOR score, and CIDEr score to evaluate their performance. Additionally, the fine-tuned ViT + GPT-2 model was later hosted on Hugging Face for the open-source community.
+                            </p>
+                            <div class="project-links">
+                                <a href="pdfs/Image_captioning.pdf" class="button" target="_blank">REPORT</a>
+                                <a href="https://github.com/arunmadhusud/Image_Captioning" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div> 
+                        <div class="project">
+                            <img src="images/classical_cv.gif" alt="Classical Computer Vision">
+                            <h3>Classical Computer Vision</h3>
+                            <p style="text-align: justify;">
+                                As part of my computer vision course at Northeastern University, I developed a series of projects that showcase various classical computer vision techniques. Implemented using C++, OpenCV, and PyTorch, these projects explore practical applications and fundamental concepts in the field.
+                            </p>
+                            <p style="text-align: justify;">
+                                The projects included are:
+                            </p>
+                            <ul>
+                                <li> Project 1: Real-time filtering using OpenCV and C++ on a webcam feed.</li>
+                                <li> Project 2: Content-based image retrieval using OpenCV and C++.</li>
+                                <li> Project 3: Real-time 2D object detection using OpenCV and C++.</li>
+                                <li> Project 4: Camera calibration and augmented reality using OpenCV and C++.</li>
+                                <li> Project 5: MNIST digit classification using PyTorch.</li>
+                            </ul>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/computer_vision_projects" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/placeholder.gif" alt="placeholder">
+                            <h3>A project using Stable Diffusion</h3>
+                            <p style="text-align: justify;"> Will be starting the project soon...</p>
+                            <!-- <div class="project-links">
+                                <a href="#" class="button">REPORT</a>
+                                <a href="#" class="button">GITHUB</a>
+                            </div> -->
+                        </div> 
+                                               
+                    </div>
+                
+               
+                    <h3 class="category-title">Model Implementation and Optimization</h3>
+                    <div class="projects">
+                        <div class="project">
+                            <img src="images/yolo.gif" alt="TensorRT Optimization">
+                            <h3>Model Inferencing Optimization using TensorRT</h3>
+                            <p style="text-align: justify;">
+                                This project provides a straightforward approach to converting a PyTorch model to TensorRT using the ONNX format. Using the YOLOv8 model, I compared inference times across the PyTorch, ONNX, and TensorRT frameworks. The results demonstrate significant performance improvements with TensorRT, achieving an FPS greater than 50. Key reasons for faster inference in TensorRT include changing the precision, layer and tensor fusion, kernel auto-tuning, multiple stream execution, and dynamic memory allocation.
+                                Challenges were encountered during ONNX inference related to version mismatches. Additionally, post-processing steps, including Non-Maximum Suppression (NMS), bounding box generation, and label creation, were implemented from scratch to ensure compatibility with the TensorRT engine and ONNX model without relying on the Ultralytics library.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/Pytorch-TensorRT-ONNX" class="button" target="_blank">REPORT</a>
+                                <a href="https://github.com/arunmadhusud/Yolov8_fast_TensorRT" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div> 
+                        <div class="project">
+                            <img src="images/ViT.gif" alt="Vision Transformer Implementation">
+                            <h3>Vision Transformer (ViT) from Scratch</h3>
+                            <p style="text-align: justify;">
+                                This project presents an unofficial PyTorch implementation of the Vision Transformer (ViT) model, inspired by the groundbreaking paper "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale". The primary objective was to create a clear, well-documented implementation that serves as both a functional model and an educational resource.
+                            </p>
+                            <p>Key features of this project include:</p>
+                            <ul>
+                                <li>A from-scratch implementation of ViT using PyTorch</li>
+                                <li>Detailed comments explaining each component of the architecture</li>
+                                <li>Visualization of attention maps to provide insights into the model's decision-making process</li>
+                                <li>Exploration of the transformer architecture's potential in computer vision tasks</li>
+                            </ul>
+                            <p style="text-align: justify;">
+                                This implementation not only demonstrates the power of transformer models in image recognition but also serves as a valuable tool for understanding and learning about this innovative approach to computer vision.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/ViT_pytorch" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/pointnet.png" alt="PointNet">
+                            <h3>PointNet from Scratch</h3>
+                            <p style="text-align: justify;">
+                                This project stemmed from my personal interest in coding architectures from scratch. PointNet is a pioneering model in the field of 3D point cloud processing, designed for tasks such as classification and segmentation of 3D shapes. I aimed to build it from the ground up to deepen my understanding and create a readily available source for future projects, minimizing reliance on the authors' specifications. I implemented both classification and part segmentation using ShapeNet data, achieving results comparable to the original authors' implementation.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/pointnet" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div> 
+                        <div class="project">
+                            <img src="images/placeholder.gif" alt="placeholder">
+                            <h3>Transformer from scratch for language translation</h3>
+                            <p style="text-align: justify;"> Coming soon (Finishig up the code)...</p>
+                            <!-- <div class="project-links">
+                                <a href="#" class="button">REPORT</a>
+                                <a href="#" class="button">GITHUB</a>
+                            </div> -->
+                        </div> 
+                    </div>                                  
+                    <h3 class="category-title">Localization and Mapping</h3>
+                    <div class="projects">
+                        <!-- <div class="project">
+                            <img src="images/IMU_Dead_Reckoning.png" alt="IMU Dead Reckoning">
+                            <h3>IMU Dead Reckoning</h3>
+                            <p style="text-align: justify;">
+                                This task involved constructing a simple navigation system using two sensors: a BU-353 GPS and a VectorNav VN-100 IMU. The primary objective was to calibrate and examine the IMU data. To gather data, the NUANCE car was driven around the campus, capturing both GPS and IMU measurements. The magnetometer was calibrated, and the collected data was combined with gyroscope data using a complementary filter. This fusion process resulted in a more precise determination of the sensor's orientation. Additionally, a dynamic bias correction was applied to the accelerometer using GPS velocity. The filtered estimates of yaw and position were then utilized for dead reckoning calculations.
+                            </p>
+                            <div class="project-links">
+                                <a href="#" class="button">REPORT</a>
+                                <a href="#" class="button">GITHUB</a>
+                            </div>
+                        </div> -->
+                        <div class="project">
+                            <img src="images/RTK_GPS.png" alt="SLAM with GPS Integration">
+                            <h3>SLAM with GPS and VINS Integration</h3>
+                            <p style="text-align: justify;">
+                                In this project, my team and I explored the common challenges of global state estimation using SLAM pipelines across diverse environments, including outdoor scenarios, indoor settings, and transitions between indoor and outdoor environments.
+                            </p>
+                            <p style="text-align: justify;">
+                                For the Visual-Inertial Navigation System (VINS) category, we conducted experiments using ORB SLAM 3 in carefully selected areas around our university, pushing each sensor to its failure limits.
+                            </p>
+                            <p style="text-align: justify;">
+                                Additionally, we evaluated the accuracy of GPS trajectories in outdoor environments by collecting data using RTK GPS, enhanced with NTRIP (Network Transport of RTCM via Internet Protocol) technology. The RTK GPS method improves measurement accuracy by receiving GPS correction signals from a base station, while the NTRIP method transmits GPS correction signals from a remote base station via the internet, eliminating the need for our own base station setup.                            </p>
+                            <p style="text-align: justify;">
+                                To assess the improvements from integrating GPS with a VINS system for state estimation, we evaluated the state-of-the-art GVINS algorithm on a complex dataset released by HKUST University.
+                            </p>
+                            <div class="project-links">
+                                <a href="pdfs/State_estimation.pdf" class="button" target="_blank">REPORT</a>
+                                <a href="https://github.com/arunmadhusud/Sensor-Fusion-System-for-State-Estimation" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        
+                        <div class="project">
+                            <img src="images/vo.gif" alt="Visual Odometry">
+                            <h3>Visual Odometry</h3>
+                            <p style="text-align: justify;">
+                                This project aimed to implement a monocular visual odometry system using OpenCV and C++. Visual odometry is a crucial technique in robotics and autonomous vehicles, enabling the estimation of camera motion from sequential images. The main goal was to solidify my understanding of feature tracking using optical flow and recovering camera poses from tracked features.
+                                The algorithm implemented consists of the following key steps:
+                                <ul>
+                                    <li>Feature detection using FAST (Features from Accelerated Segment Test)</li>
+                                    <li>Feature tracking using Lucas-Kanade Optical Flow</li>
+                                    <li>Essential Matrix computation using tracked features to recover camera pose</li>
+                                    <li>Absolute scale estimation using GPS data</li>
+                                </ul>
+                            </p>
+                            <p style="text-align: justify;">
+                                The primary challenge in this project was obtaining absolute scale measurements, as monocular cameras can only estimate relative poses. To overcome this, I integrated GPS information. The GPS data, provided in latitude, longitude, and altitude, was converted to UTM coordinates. The distance between consecutive UTM coordinates was then calculated and used to estimate the scale factor, allowing for accurate trajectory reconstruction.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/visual_odometry" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="contact" class="section">
+                    <h2 class="section-title">CONTACT</h2>
+                    <div class="contact-icons">
+                        <a href="mailto:madhusudhanan.a@northeastern.edu" class="contact-item" title="Email">
+                            <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/gmail.svg" alt="Email icon">
+                            <span>Email</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/arun-m1/" target="_blank" rel="noopener noreferrer" class="contact-item" title="LinkedIn">
+                            <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/linkedin.svg" alt="LinkedIn icon">
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="https://github.com/arunmadhusud" target="_blank" rel="noopener noreferrer" class="contact-item" title="GitHub">
+                            <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/github.svg" alt="GitHub icon">
+                            <span>GitHub</span>
+                        </a>
+                    </div>
+                </div>
+            </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mobileNav = document.querySelector('.mobile-nav');
+            const mobileMenu = document.querySelector('.mobile-menu');
+    
+            menuToggle.addEventListener('click', function(event) {
+                event.stopPropagation();
+                toggleMenu();
+            });
+    
+            document.addEventListener('click', function(event) {
+                if (mobileNav.style.display === 'block' && !mobileMenu.contains(event.target)) {
+                    closeMenu();
+                }
+            });
+    
+            function toggleMenu() {
+                mobileNav.style.display = mobileNav.style.display === 'block' ? 'none' : 'block';
+            }
+    
+            function closeMenu() {
+                mobileNav.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
