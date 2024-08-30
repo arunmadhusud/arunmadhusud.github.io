@@ -716,18 +716,7 @@
                             </div>
                         </div>  
                         
-                        <!-- Add a placeholder for new project : Sesnor fusion of Lidar and Radar -->
-                        <div class="project">
-                            <img src="images/placeholder.gif" alt="placeholder">
-                            <h3>Sensor fusion of Lidar and Radar for object tracking</h3>
-                            <p style="text-align: justify;"> Coming soon (Working on this project now)...</p>
-                            <!-- <div class="project-links">
-                                <a href="#" class="button">REPORT</a>
-                                <a href="#" class="button">GITHUB</a>
-                            </div> -->
-                        </div> 
-
-                        
+                       
                     </div>
                     
                     
@@ -870,6 +859,25 @@
                                 <a href="#" class="button">GITHUB</a>
                             </div>
                         </div> -->
+                        <!-- Add a placeholder for new project : Sesnor fusion of Lidar and Radar -->
+                        <div class="project">
+                            <img src="images/ukf_results.gif" alt="UKF Results Animation">
+                            <h3>Sensor Fusion of LiDAR and Radar using Unscented Kalman Filter for Object Tracking</h3>
+                            <p style="text-align: justify;">This project implements an Unscented Kalman Filter (UKF) for sensor fusion of LiDAR and Radar data to track moving objects around an ego vehicle. It's part of the Udacity Self-Driving Car Nanodegree Program.</p>
+                            <p>Key features of this project include:</p>
+                            <ul>
+                                <li>Sensor Fusion: Combining data from LiDAR and Radar sensors for more accurate object tracking</li>
+                                <li>CTRV Motion Model: Utilization of a Constant Turn Rate and Velocity model for predicting object motion</li>
+                                <li>Performance Evaluation: Accuracy measured using Root Mean Squared Error (RMSE) over each time step and for each tracked car</li>
+                                <li>Normalized Innovation Squared (NIS): LiDAR and Radar NIS values plotted to validate filter consistency. Core algorithm in C++ with a Python wrapper using pybind11 for visualization of NIS plots</li>
+                            </ul>
+                            <p style="text-align: justify;">
+                                The results demonstrate the UKF's ability to track multiple traffic cars effectively, even with variable acceleration and turning rates. Most of the NIS values for both LiDAR and Radar measurements fall within the 95% confidence interval, indicating that the UKF is performing as expected.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/LiDAR-RADAR-Fusion-UKF" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
                         <div class="project">
                             <img src="images/RTK_GPS.png" alt="State Estimation: Challenges in Mixed Environments">
                             <h3>State Estimation: Challenges in Mixed Environments</h3>
