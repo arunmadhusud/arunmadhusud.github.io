@@ -498,7 +498,7 @@
                 <p class="subtitle">ROBOTICS & AI | COMPUTER VISION | Ex - EXXONMOBIL | Ex - FESTO</p>
                 <div class="social-icons">
                     <a href="https://www.linkedin.com/in/arun-m1/" target="_blank" class="social-icon linkedin">
-                        <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/linkedin.svg" alt="LinkedIn">
+                        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/linkedin.svg" alt="LinkedIn">
                         LinkedIn
                     </a>
                     <a href="https://github.com/arunmadhusud" target="_blank" class="social-icon github">
@@ -626,40 +626,224 @@
                         </p>
                     </div>
 
-                    <h3 class="category-title">3D Vision and Processing</h3>
+                    <!-- <h3 class="category-title">3D Vision and Processing</h3> -->
                     <div class="projects">
                         <div class="project">
                             <img src="images/openvocab_grasp.gif" alt="Multi-Modal Open-Vocabulary Grasping">
                             <h3>Multi-Modal Open-Vocabulary Grasping</h3>
                             <p style="text-align: justify;">
-                                How can we enable robots to interpret high-level grasping instructions like "Give me an apple" instead of relying on basic commands like "Pick the object at Pose X"? How can we ensure they generalize beyond a predefined set of objects and operate in an open-vocabulary manner?
+                                How can we enable robots to interpret high-level grasping instructions like <em>"Give me an apple"</em> instead of relying on basic commands like <em>"Pick the object at Pose X"</em>? How can we ensure they generalize beyond a predefined set of objects and operate in an <em>open-vocabulary</em> manner? How can we issue complex queries that require <em>spatial understanding</em>, like <em>"Give me the fruit from the top corner"</em>?                            </p>
+                            <p style="text-align: justify;">
+                                Introducing <strong>Multi-Modal Open-Vocabulary Grasping</strong>, a project that integrates a stack of Vision-Language Foundational Models (RAM, Grounding DINO, SAM) for scene understanding with GraspNet for grasp prediction. This enables robots to understand complex queries and interact more intelligently.
                             </p>
                             <p style="text-align: justify;">
-                                Introducing Multi-Modal Open-Vocabulary Grasping, a project that integrates a stack of Vision-Language Foundational Models (RAM, Grounding DINO, SAM, CLIP) for scene understanding with GraspNet for grasp prediction. This enables robots to understand complex queries and interact more intelligently. By incorporating multi-modal capabilities, the system processes and responds to diverse inputs, including text and images, enhancing human-robot interaction like never before!
+                                The setup works as follows:
                             </p>
+                            <ul style="text-align: justify; padding-left: 1.5rem;">
+                                <li>The scene image captured by the camera in the manipulator is processed using <strong>RAM</strong>, <strong>Grounding DINO</strong>, and <strong>SAM</strong> to extract fine-grained object masks in an <strong>open-vocabulary</strong> fashion.</li>
+                                <li>These masks are used to generate <strong>mask-labeled images</strong>.</li>
+                                <li>A <strong>VLM</strong> then reasons over the marked image (<strong>Set of Mark Prompting</strong>) using the user's query and retrieves the most relevant object, enabling better spatial understanding and more accurate object identification, even from complex natural language queries. I have used <strong>LLaMA 4 Scout</strong> (currently accessed via <strong>Groq Cloud</strong>) for this purpose, but any VLM can be integrated into the pipeline.</li>
+                                <li>For simpler queries, a fallback <strong>CLIP</strong>-based retrieval system can be used instead of a full VLM.</li>
+                                <li>Once the relevant object is localized, <strong>GraspNet</strong> is used to predict viable grasp posesfor physical interaction, enabling the robot to execute the desired manipulation.</li>
+                            </ul>
                             <div class="project-links">
                                 <a href="https://github.com/arunmadhusud/Open-Vocabulary-Multi-Modal-Robotic-Grasping" class="button" target="_blank">GITHUB</a>
                             </div>
-                        </div>   
+                        </div>
+                        <div class="project">
+                            <img src="images/3d_scene_understanding.gif" alt="Multi-Modal Open-Vocabulary Grasping">
+                            <h3>Multi-Modal Open-Vocabulary 3D Scene Understanding</h3>
+                            
+                            <p style="text-align: justify;">
+                                In a team of three, we built a system that enables a robot to understand natural language, image, or audio queries in an <strong>open-vocabulary</strong> setting within a 3D environment. 
+                                Imagine telling a robot, <em>“Pick up the toy from the living room”</em>; without providing explicit 3D coordinates, the robot should be able to identify what the toy is and where it is, 
+                                before navigating to it and performing the necessary actions.
+                            </p>
+                            
+                            <p style="text-align: justify;">
+                                Our pipeline starts with a posed set of <strong>RGB-D images</strong> used to reconstruct a 3D map of the environment. In parallel, we extract semantic features from 2D images using a stack of foundational vision models:
+                            </p>
+                            <ul style="text-align: justify; padding-left: 1.5rem;">
+                                <li><strong>RAM</strong> identifies object tags,</li>
+                                <li>which are passed as text prompts to <strong>Grounding DINO</strong> to generate bounding boxes,</li>
+                                <li>these bounding boxes are used as input prompts for <strong>SAM</strong> to extract object masks,</li>
+                                <li>and <strong>CLIP’s</strong> image encoder embeds the masked regions with semantic features.</li>
+                            </ul>                            
+                            <p style="text-align: justify;">
+                                Using depth data, we project these 2D features into 3D space to create object-specific point clouds, which are embedded and maintained in a global 3D map.
+                            </p>
+                            
+                            <p style="text-align: justify;">
+                                To answer natural language, image, or audio queries, we embed the input using <strong>CLIP</strong> (for text or image) or <strong>Meta’s ImageBind</strong> (for audio), 
+                                and retrieve the most relevant object by computing similarity between the query embedding and the object embeddings.
+                            </p>
+                            
+                            <p style="text-align: justify;">
+                                To handle ambiguity, such as multiple similar objects in different rooms, we construct a hierarchical scene graph, where rooms are parent nodes and objects are children. 
+                                A large language model (e.g., <strong>Qwen2-7B</strong>) parses user queries to identify relevant scene graph nodes (room), helping the robot narrow its search space intelligently.
+                            </p>
+                            
+                            <div class="project-links">
+                                <a href="pdfs/3D_Scene_Understanding.pdf" class="button" target="_blank">REPORT</a>
+                            </div>
+                        </div>  
+                        <div class="project">
+                            <img src="images/lora_vllm.png" alt="LoRA-QLoRA vLLM Inference Performance">
+                            <h3>Efficient LoRA Fine-Tuning & Inference of Quantized Qwen2-VL Models</h3>
+                            <p style="text-align: justify;">
+                                This project focuses on the efficient fine-tuning and inference of a <strong>4-bit quantized Qwen2-VL Vision-Language Model</strong> on a LaTeX OCR dataset using <strong>LoRA techniques</strong>. It explores two complementary approaches to low-bit fine-tuning:
+                            </p>
+                            <ul style="text-align: justify; padding-left: 1.5rem;">
+                                <li>
+                                    In the first approach, the model is quantized to 4-bit using the <strong>GPTQ</strong> method with the <strong>GPTQModel</strong> library. This GPTQ-quantized model is then fine-tuned using <strong>LoRA</strong> with the <strong>Hugging Face TRL</strong> library.
+                                </li>
+                                <li>
+                                    In the second approach, a 4-bit quantized model is fine-tuned using <strong>QLoRA</strong> with the <strong>Unsloth</strong> library. Unsloth uses <strong>NF4</strong> quantization (from the <strong>bitsandbytes</strong> library) to load the model in 4-bit.
+                                </li>
+                            </ul>
+                            <p style="text-align: justify;">
+                                Both pipelines significantly reduce resource consumption during training while maintaining strong performance. Models are evaluated using metrics such as <strong>BLEU score</strong> and <strong>Levenshtein edit distance</strong>, demonstrating substantial improvements over baseline performance.
+                            </p>
+                            <p style="text-align: justify;">
+                                For inference, the project uses the <strong>vLLM</strong> library to serve LoRA-adapted models efficiently without merging. Performance benchmarks such as <strong>throughput</strong>, <strong>TTFT</strong>, <strong>TPOT</strong>, and <strong>ITL</strong> are collected and visualized to compare serving efficiency across both GPTQ and QLoRA models.
+                            </p>
+                            <p style="text-align: justify;">
+                                The repository includes detailed installation steps and is supported by comprehensive Medium articles covering quantization, fine-tuning strategies, and vLLM-based deployment:
+                            </p>
+                            <ul style="text-align: justify; padding-left: 1.5rem;">
+                                <li><a href="https://medium.com/@arunsreekuttan1996/quantizing-qwen2-vl-models-with-gptqmodel-a-complete-guide-for-multi-modal-model-compression-and-f329ea18a17b" target="_blank">Quantizing Qwen2-VL Models with GPTQModel</a></li>
+                                <li><a href="https://medium.com/@arunsreekuttan1996/fine-tuning-gptq-quantized-vision-language-models-with-lora-733d1e687ff5" target="_blank">Fine-tuning GPTQ Quantized Models with LoRA</a></li>
+                                <li><a href="https://medium.com/@arunsreekuttan1996/efficiently-serve-and-benchmark-lora-fine-tuned-vision-language-models-using-vllm-3fd8c970b809" target="_blank">Efficiently Serve and Benchmark LoRA Models using vLLM</a></li>
+                            </ul>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/lora-qlora-vllm-inference" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/tensorrt_models.png" alt="TensorRT Models Conversion and Inference">
+                            <h3>Optimized TensorRT Conversion for Popular Deep Learning Models</h3>
+                            <p style="text-align: justify;">
+                                This project provides a modular codebase for converting popular deep learning models into highly optimized <strong>TensorRT</strong> engines to enable accelerated inference on NVIDIA GPUs. The models are first converted to <strong>ONNX</strong> format before being compiled into TensorRT engines. The repository supports both FP32 and FP16 precision, and the performance of the models is validated through inference using the converted TensorRT engines, demonstrating significant speed improvements.
+                            </p>
+                            <p style="text-align: justify;">
+                                Currently, the project supports conversion of the following PyTorch models into TensorRT engines:
+                            </p>
+                            <ul style="text-align: justify; padding-left: 1.5rem;">
+                                <li>
+                                    <strong>CLIP model (ViT-L/14, OpenCLIP Implementation):</strong> Enables fast image-text alignment. The converted engines demonstrate over five times speedup for both the image and text encoders.
+                                </li>
+                                <li>
+                                    <strong>CoCa model (ViT-L/14, OpenCLIP Implementation):</strong> Enables fast image captioning and image-text alignment. The inference pipeline includes caption generation using greedy decoding, with all components — the image encoder, unimodal text decoder, and multimodal text decoder — running entirely within TensorRT. This approach achieves up to 7.6 times acceleration.
+                                </li>
+                                <li>
+                                    <strong>YOLOv8:</strong> Enables real-time object detection. The converted TensorRT engine includes built-in <strong>EfficientNMS via TensorRT plugins</strong> for perfoming Non-Maximum Suppression. The inference time shows over three times speedup compared to the PyTorch model without NMS included. The actual speedup is even greater because the PyTorch pipeline requires an additional, separate NMS step, which is integrated within the TensorRT engine.
+                                </li>
+                            </ul>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/tensorrt_models.git" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+
                         <div class="project">
                             <img src="images/ttc_results_2.gif" alt="Time to Collision">
                             <h3>Time to Collision (TTC) Calculation Using Camera and LiDAR Data</h3>
                             <p style="text-align: justify;">
-                                The goal of this project is to detect and track 3D objects using both camera and LiDAR data, and to calculate the Time to Collision (TTC) for each object in the ego lane using each sensor separately. Accurate TTC calculation is crucial for collision avoidance in autonomous driving, where precise timing can help prevent accidents. 
-                            <p style="text-align: justify;">
-                                The project involved the following steps:
+                                The goal of this project, part of the Sensor Fusion Nanodegree at Udacity, is to detect and track 3D objects using a combination of camera and LiDAR data, and calculate the Time to Collision (TTC) with the nearest object in the ego lane. Additionally, the project focuses on accelerating the inference speed of YOLOv8 for C++ and CPU deployment.                            <p style="text-align: justify;">
+                                Key aspects of the project include:
                                 <ul>
-                                    <li>Detecting 2D objects in camera images using YOLO v3.</li>
-                                    <li>Processing LiDAR point cloud data to identify 3D objects within the ego lane.</li>
-                                    <li>Tracking the 2D bounding boxes detected by YOLO across frames using a keypoint matching method.</li>
-                                    <li>Associating 3D points projected onto the image plane with the tracked 2D bounding boxes to monitor 3D objects.</li>
-                                    <li>Calculating TTC separately using camera and LiDAR data for the tracked 3D objects and 2D bounding boxes.</li>
+                                    <li>Efficient 2D Object Detection: YOLOv8 is deployed in C++ with OpenVINO acceleration and INT8 quantization for optimized inference on CPU. The implementation supports both ONNX Runtime and OpenCV-DNN for flexibility.</li>
+                                    <li>LiDAR Point Cloud Processing: Filtering and projecting 3D points onto the image plane to align LiDAR data with detected objects.</li>
+                                    <li>Object Tracking: Matching YOLO-detected bounding boxes across frames using Shi-Tomasi keypoints, BRISK descriptors, and Brute-Force matching to track objects in both 2D and 3D.</li>
+                                    <li>TTC Calculation: Estimating collision time using both camera-based keypoint tracking and LiDAR depth measurements.</li>
                                 </ul>
                             </p>
                             <div class="project-links">
                                 <a href="https://github.com/arunmadhusud/Time_2_collision" class="button" target="_blank">GITHUB</a>
                             </div>
-                        </div>                   
+                        </div> 
+                        <!-- Add a placeholder for new project : Sesnor fusion of Lidar and Radar -->
+                        <div class="project">
+                            <img src="images/ukf_results.gif" alt="UKF Results Animation">
+                            <h3>Sensor Fusion of LiDAR and Radar using Unscented Kalman Filter for Object Tracking</h3>
+                            <p style="text-align: justify;">This project implements an Unscented Kalman Filter (UKF) for sensor fusion of LiDAR and Radar data to track moving objects around an ego vehicle. It's part of the Udacity Self-Driving Car Nanodegree Program.</p>
+                            <p>Key features of this project include:</p>
+                            <ul>
+                                <li>Sensor Fusion: Combining data from LiDAR and Radar sensors for more accurate object tracking</li>
+                                <li>CTRV Motion Model: Utilization of a Constant Turn Rate and Velocity model for predicting object motion</li>
+                                <li>Performance Evaluation: Accuracy measured using Root Mean Squared Error (RMSE) over each time step and for each tracked car</li>
+                                <li>Normalized Innovation Squared (NIS): LiDAR and Radar NIS values plotted to validate filter consistency. Core algorithm in C++ with a Python wrapper using pybind11 for visualization of NIS plots</li>
+                            </ul>
+                            <p style="text-align: justify;">
+                                The results demonstrate the UKF's ability to track multiple traffic cars effectively, even with variable acceleration and turning rates. Most of the NIS values for both LiDAR and Radar measurements fall within the 95% confidence interval, indicating that the UKF is performing as expected.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/LiDAR-RADAR-Fusion-UKF" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div> 
+                        <div class="project">
+                            <img src="images/vo.gif" alt="Visual Odometry">
+                            <h3>Visual Odometry</h3>
+                            <p style="text-align: justify;">
+                                This project aimed to implement a monocular visual odometry system using OpenCV and C++. Visual odometry is a crucial technique in robotics and autonomous vehicles, enabling the estimation of camera motion from sequential images. The main goal was to solidify my understanding of feature tracking using optical flow and recovering camera poses from tracked features.
+                                The algorithm implemented consists of the following key steps:
+                                <ul>
+                                    <li>Feature detection using FAST (Features from Accelerated Segment Test)</li>
+                                    <li>Feature tracking using Lucas-Kanade Optical Flow</li>
+                                    <li>Essential Matrix computation using tracked features to recover camera pose</li>
+                                    <li>Absolute scale estimation using GPS data</li>
+                                </ul>
+                            </p>
+                            <p style="text-align: justify;">
+                                The primary challenge in this project was obtaining absolute scale measurements, as monocular cameras can only estimate relative poses. To overcome this, I integrated GPS information. The GPS data, provided in latitude, longitude, and altitude, was converted to UTM coordinates. The distance between consecutive UTM coordinates was then calculated and used to estimate the scale factor, allowing for accurate trajectory reconstruction.
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/visual_odometry" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>
+                        <div class="project">
+                            <img src="images/sfm.gif" alt="Structure from Motion">
+                            <h3>Structure from Motion (SfM)</h3>
+                            <p style="text-align: justify;">
+                                Structure from Motion (SfM) is a powerful technique in computer vision that enables the reconstruction of 3D structures from sequences of 2D images. This project aimed to solidify my understanding of 3D reconstruction principles, including keypoint detection and matching, camera projection matrices, stereo vision, fundamental and essential matrices, and bundle adjustment.
+                                Using a dataset provided by COLMAP, I implemented a complete SfM pipeline with the following key steps:
+                                <ul>
+                                    <li>Feature detection and matching using the AKAZE.</li>
+                                    <li>Fundamental matrix estimation.</li>
+                                    <li>Camera pose estimation.</li>
+                                    <li>Triangulation to reconstruct 3D points from corresponding 2D image points.</li>
+                                </ul>
+                            </p>
+                            <p style="text-align: justify;">
+                                The reconstructed 3D structure was visualized using the Open3D library.Two main challenges were addressed in this project:
+                                <ul>
+                                    <li>Accurate relative scale estimation between frames: Solved by storing and comparing previously triangulated 3D points with those obtained from new views.</li>
+                                    <li>Outlier removal: Implemented using the RANSAC method during fundamental matrix calculation, enhancing the robustness of the reconstruction.</li>
+                                </ul>
+                            </p>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/structure_from_motion" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>    
+                        <div class="project">
+                            <img src="images/classical_cv.gif" alt="Classical Computer Vision">
+                            <h3>Classical Computer Vision</h3>
+                            <p style="text-align: justify;">
+                                As part of my computer vision course at Northeastern University, I developed a series of projects that showcase various classical computer vision techniques. Implemented using C++, OpenCV, and PyTorch, these projects explore practical applications and fundamental concepts in the field.
+                            </p>
+                            <p style="text-align: justify;">
+                                The projects included are:
+                            </p>
+                            <ul>
+                                <li> Project 1: Real-time filtering using OpenCV and C++ on a webcam feed.</li>
+                                <li> Project 2: Content-based image retrieval using OpenCV and C++.</li>
+                                <li> Project 3: Real-time 2D object detection using OpenCV and C++.</li>
+                                <li> Project 4: Camera calibration and augmented reality using OpenCV and C++.</li>
+                                <li> Project 5: MNIST digit classification using PyTorch.</li>
+                            </ul>
+                            <div class="project-links">
+                                <a href="https://github.com/arunmadhusud/computer_vision_projects" class="button" target="_blank">GITHUB</a>
+                            </div>
+                        </div>             
                         <div class="project">
                             <img src="images/pcl.gif" alt="PCL Processing">
                             <h3>3D Point Cloud Processing using PCL</h3>
@@ -699,31 +883,6 @@
                    
 
                         <div class="project">
-                            <img src="images/sfm.gif" alt="Structure from Motion">
-                            <h3>Structure from Motion (SfM)</h3>
-                            <p style="text-align: justify;">
-                                Structure from Motion (SfM) is a powerful technique in computer vision that enables the reconstruction of 3D structures from sequences of 2D images. This project aimed to solidify my understanding of 3D reconstruction principles, including keypoint detection and matching, camera projection matrices, stereo vision, fundamental and essential matrices, and bundle adjustment.
-                                Using a dataset provided by COLMAP, I implemented a complete SfM pipeline with the following key steps:
-                                <ul>
-                                    <li>Feature detection and matching using the AKAZE.</li>
-                                    <li>Fundamental matrix estimation.</li>
-                                    <li>Camera pose estimation.</li>
-                                    <li>Triangulation to reconstruct 3D points from corresponding 2D image points.</li>
-                                </ul>
-                            </p>
-                            <p style="text-align: justify;">
-                                The reconstructed 3D structure was visualized using the Open3D library.Two main challenges were addressed in this project:
-                                <ul>
-                                    <li>Accurate relative scale estimation between frames: Solved by storing and comparing previously triangulated 3D points with those obtained from new views.</li>
-                                    <li>Outlier removal: Implemented using the RANSAC method during fundamental matrix calculation, enhancing the robustness of the reconstruction.</li>
-                                </ul>
-                            </p>
-                            <div class="project-links">
-                                <a href="https://github.com/arunmadhusud/structure_from_motion" class="button" target="_blank">GITHUB</a>
-                            </div>
-                        </div>
-
-                        <div class="project">
                             <img src="images/GRNet_pointnet.gif" alt="3D Object Detection">
                             <h3>3D Object Detection From Partial Point Clouds</h3>
                             <p style="text-align: justify;">
@@ -739,7 +898,7 @@
                     </div>
                     
                     
-                    <h3 class="category-title">Computer Vision</h3>
+                    <!-- <h3 class="category-title">Computer Vision</h3> -->
                     <div class="projects">
                         <div class="project">
                             <img src="images/opticalflow.gif" alt="Optical Flow Estimation">
@@ -752,7 +911,7 @@
                                 <a href="https://github.com/arunmadhusud/Optical-Flow-Estimation" class="button" target="_blank">GITHUB</a>
                             </div>
                         </div>
-                        <div class="project">
+                        <!-- <div class="project">
                             <img src="images/vqgan.gif" alt="GAN and VAE">
                             <h3>GAN and VAE from Scratch</h3>
                             <p style="text-align: justify;">
@@ -765,8 +924,8 @@
                                 <a href="https://github.com/arunmadhusud/ML-models-from-scratch/tree/main/GAN_VAE" class="button" target="_blank">REPORT</a>
                                 <a href="https://github.com/arunmadhusud/VQGAN-CLIP" class="button" target="_blank">GITHUB</a>
                             </div>
-                        </div>                      
-
+                        </div>                       -->
+<!-- 
                         <div class="project">
                             <img src="images/image_captioning.gif" alt="Image Captioning">
                             <h3>Image Captioning using CNN + LSTMs and ViT + GPT2</h3>
@@ -777,43 +936,18 @@
                                 <a href="pdfs/Image_captioning.pdf" class="button" target="_blank">REPORT</a>
                                 <a href="https://github.com/arunmadhusud/Image_Captioning" class="button" target="_blank">GITHUB</a>
                             </div>
-                        </div> 
-                        <div class="project">
-                            <img src="images/classical_cv.gif" alt="Classical Computer Vision">
-                            <h3>Classical Computer Vision</h3>
-                            <p style="text-align: justify;">
-                                As part of my computer vision course at Northeastern University, I developed a series of projects that showcase various classical computer vision techniques. Implemented using C++, OpenCV, and PyTorch, these projects explore practical applications and fundamental concepts in the field.
-                            </p>
-                            <p style="text-align: justify;">
-                                The projects included are:
-                            </p>
-                            <ul>
-                                <li> Project 1: Real-time filtering using OpenCV and C++ on a webcam feed.</li>
-                                <li> Project 2: Content-based image retrieval using OpenCV and C++.</li>
-                                <li> Project 3: Real-time 2D object detection using OpenCV and C++.</li>
-                                <li> Project 4: Camera calibration and augmented reality using OpenCV and C++.</li>
-                                <li> Project 5: MNIST digit classification using PyTorch.</li>
-                            </ul>
-                            <div class="project-links">
-                                <a href="https://github.com/arunmadhusud/computer_vision_projects" class="button" target="_blank">GITHUB</a>
-                            </div>
-                        </div>
-                        <div class="project">
+                        </div>  -->
+                        <!-- <div class="project">
                             <img src="images/placeholder.gif" alt="placeholder">
                             <h3>A project using Stable Diffusion</h3>
                             <p style="text-align: justify;"> Will be starting the project soon...</p>
-                            <!-- <div class="project-links">
-                                <a href="#" class="button">REPORT</a>
-                                <a href="#" class="button">GITHUB</a>
-                            </div> -->
-                        </div> 
+                        </div>  -->
                                                
-                    </div>
-                
+                    <!-- </div>               -->
                
-                    <h3 class="category-title">Model Implementation and Optimization</h3>
-                    <div class="projects">
-                        <div class="project">
+                    <!-- <h3 class="category-title">Model Implementation and Optimization</h3> -->
+                    <!-- <div class="projects"> -->
+                        <!-- <div class="project">
                             <img src="images/yolo.gif" alt="TensorRT Optimization">
                             <h3>Model Inferencing Optimization using TensorRT</h3>
                             <p style="text-align: justify;">
@@ -824,7 +958,7 @@
                                 <a href="https://github.com/arunmadhusud/Pytorch-TensorRT-ONNX" class="button" target="_blank">REPORT</a>
                                 <a href="https://github.com/arunmadhusud/Yolov8_fast_TensorRT" class="button" target="_blank">GITHUB</a>
                             </div>
-                        </div> 
+                        </div>  -->
                         <div class="project">
                             <img src="images/ViT.gif" alt="Vision Transformer Implementation">
                             <h3>Vision Transformer (ViT) from Scratch</h3>
@@ -855,18 +989,14 @@
                                 <a href="https://github.com/arunmadhusud/ML-models-from-scratch/tree/main/pointnet" class="button" target="_blank">GITHUB</a>
                             </div>
                         </div> 
-                        <div class="project">
+                        <!-- <div class="project">
                             <img src="images/placeholder.gif" alt="placeholder">
                             <h3>Transformer from scratch for language translation</h3>
                             <p style="text-align: justify;"> Coming soon (Finishig up the code)...</p>
-                            <!-- <div class="project-links">
-                                <a href="#" class="button">REPORT</a>
-                                <a href="#" class="button">GITHUB</a>
-                            </div> -->
-                        </div> 
-                    </div>                                  
-                    <h3 class="category-title">Localization and Mapping</h3>
-                    <div class="projects">
+                        </div>  -->
+                    <!-- </div>                                   -->
+                    <!-- <h3 class="category-title">Localization and Mapping</h3> -->
+                    <!-- <div class="projects"> -->
                         <!-- <div class="project">
                             <img src="images/IMU_Dead_Reckoning.png" alt="IMU Dead Reckoning">
                             <h3>IMU Dead Reckoning</h3>
@@ -878,25 +1008,6 @@
                                 <a href="#" class="button">GITHUB</a>
                             </div>
                         </div> -->
-                        <!-- Add a placeholder for new project : Sesnor fusion of Lidar and Radar -->
-                        <div class="project">
-                            <img src="images/ukf_results.gif" alt="UKF Results Animation">
-                            <h3>Sensor Fusion of LiDAR and Radar using Unscented Kalman Filter for Object Tracking</h3>
-                            <p style="text-align: justify;">This project implements an Unscented Kalman Filter (UKF) for sensor fusion of LiDAR and Radar data to track moving objects around an ego vehicle. It's part of the Udacity Self-Driving Car Nanodegree Program.</p>
-                            <p>Key features of this project include:</p>
-                            <ul>
-                                <li>Sensor Fusion: Combining data from LiDAR and Radar sensors for more accurate object tracking</li>
-                                <li>CTRV Motion Model: Utilization of a Constant Turn Rate and Velocity model for predicting object motion</li>
-                                <li>Performance Evaluation: Accuracy measured using Root Mean Squared Error (RMSE) over each time step and for each tracked car</li>
-                                <li>Normalized Innovation Squared (NIS): LiDAR and Radar NIS values plotted to validate filter consistency. Core algorithm in C++ with a Python wrapper using pybind11 for visualization of NIS plots</li>
-                            </ul>
-                            <p style="text-align: justify;">
-                                The results demonstrate the UKF's ability to track multiple traffic cars effectively, even with variable acceleration and turning rates. Most of the NIS values for both LiDAR and Radar measurements fall within the 95% confidence interval, indicating that the UKF is performing as expected.
-                            </p>
-                            <div class="project-links">
-                                <a href="https://github.com/arunmadhusud/LiDAR-RADAR-Fusion-UKF" class="button" target="_blank">GITHUB</a>
-                            </div>
-                        </div>
                         <div class="project">
                             <img src="images/RTK_GPS.png" alt="State Estimation: Challenges in Mixed Environments">
                             <h3>State Estimation: Challenges in Mixed Environments</h3>
@@ -917,26 +1028,6 @@
                             </div>
                         </div>
                         
-                        <div class="project">
-                            <img src="images/vo.gif" alt="Visual Odometry">
-                            <h3>Visual Odometry</h3>
-                            <p style="text-align: justify;">
-                                This project aimed to implement a monocular visual odometry system using OpenCV and C++. Visual odometry is a crucial technique in robotics and autonomous vehicles, enabling the estimation of camera motion from sequential images. The main goal was to solidify my understanding of feature tracking using optical flow and recovering camera poses from tracked features.
-                                The algorithm implemented consists of the following key steps:
-                                <ul>
-                                    <li>Feature detection using FAST (Features from Accelerated Segment Test)</li>
-                                    <li>Feature tracking using Lucas-Kanade Optical Flow</li>
-                                    <li>Essential Matrix computation using tracked features to recover camera pose</li>
-                                    <li>Absolute scale estimation using GPS data</li>
-                                </ul>
-                            </p>
-                            <p style="text-align: justify;">
-                                The primary challenge in this project was obtaining absolute scale measurements, as monocular cameras can only estimate relative poses. To overcome this, I integrated GPS information. The GPS data, provided in latitude, longitude, and altitude, was converted to UTM coordinates. The distance between consecutive UTM coordinates was then calculated and used to estimate the scale factor, allowing for accurate trajectory reconstruction.
-                            </p>
-                            <div class="project-links">
-                                <a href="https://github.com/arunmadhusud/visual_odometry" class="button" target="_blank">GITHUB</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -948,7 +1039,7 @@
                             <span>Email</span>
                         </a>
                         <a href="https://www.linkedin.com/in/arun-m1/" target="_blank" rel="noopener noreferrer" class="contact-item" title="LinkedIn">
-                            <img src="https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/linkedin.svg" alt="LinkedIn icon">
+                            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/linkedin.svg" alt="LinkedIn icon">
                             <span>LinkedIn</span>
                         </a>
                         <a href="https://github.com/arunmadhusud" target="_blank" rel="noopener noreferrer" class="contact-item" title="GitHub">
